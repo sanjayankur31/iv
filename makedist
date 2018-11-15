@@ -31,10 +31,6 @@ zip iv.zip `find src -name \*.in -print`
 zip iv.zip Makefile.in config.h.in configure.in
 
 zip iv.zip \
-src/lib/TIFF/Copyright \
-src/lib/TIFF/HOWTO \
-src/lib/TIFF/README \
-src/lib/TIFF/VERSION \
 src/lib/app-defaults/Idemo \
 src/lib/app-defaults/Doc \
 src/lib/app-defaults/InterViews \

@@ -57,8 +57,6 @@ INCLUDES = -I../include $(X_CFLAGS)
 @CYGWIN_TRUE@KIT_DEFINES = -Dmotif_kit -Dsgi_motif_kit
 @MINGW_TRUE@KIT_DEFINES = -Dmotif_kit -Dsgi_motif_kit
 @CARBON_TRUE@KIT_DEFINES = -Dmotif_kit -Dsgi_motif_kit -Dbw_kit -Ddefault_kit=SMFKit
-TIFF_DEFINES = -DCOLORIMETRY_SUPPORT -DJPEG_SUPPORT -DYCBCR_SUPPORT -DCMYK_SUPPORT -DHAVE_IEEEFP=1 -DUSE_VARARGS=0 -DUSE_PROTOTYPES=1 -DUSE_CONST=1
-TIFF_INCLUDES = -I../include/TIFF
 
 # Rename the libraries to something unique so we don't accidently link with
 # a vanilla interviews distribution.
@@ -229,38 +227,6 @@ os = \
 	OS/memory.lo \
 	OS/string.lo \
 	OS/ustring.lo
-
-tiff = \
-	TIFF/tif_aux.lo \
-	TIFF/tif_ccittrle.lo \
-	TIFF/tif_close.lo \
-	TIFF/tif_cmprs.lo \
-	TIFF/tif_compat.lo \
-	TIFF/tif_dir.lo \
-	TIFF/tif_dirinfo.lo \
-	TIFF/tif_dirread.lo \
-	TIFF/tif_dirwrite.lo \
-	TIFF/tif_dumpmode.lo \
-	TIFF/tif_error.lo \
-	TIFF/tif_fax3.lo \
-	TIFF/tif_fax4.lo \
-	TIFF/tif_flush.lo \
-	TIFF/tif_getimage.lo \
-	TIFF/tif_jpeg.lo \
-	TIFF/tif_lzw.lo \
-	TIFF/tif_machdep.lo \
-	TIFF/tif_next.lo \
-	TIFF/tif_open.lo \
-	TIFF/tif_packbits.lo \
-	TIFF/tif_print.lo \
-	TIFF/tif_read.lo \
-	TIFF/tif_strip.lo \
-	TIFF/tif_swab.lo \
-	TIFF/tif_thunder.lo \
-	TIFF/tif_tile.lo \
-	TIFF/tif_version.lo \
-	TIFF/tif_warning.lo \
-	TIFF/tif_write.lo
 
 ivwin = \
 	IV-Win/bitmap.lo \
@@ -441,7 +407,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 
 
 clean:
-	$(RM) *.la */*.o */*.lo */*.la TIFF/g3states.h TIFF/mkg3states
+	$(RM) *.la */*.o */*.lo */*.la
 	rm -rf .libs */.libs
 
 distclean: clean
@@ -482,11 +448,8 @@ $(libUnidraw): $(libUnidraw_la_OBJECTS) $(libUnidraw_la_DEPENDENCIES)
 	@$(LTCXXCOMPILE) -c -o $@ $<
 
 #
-# It turns out that all of the C files are actually from the TIFF directory,
-# so they all want the same flags:
-#
 .c.lo:
-	@$(LTCCOMPILE) $(TIFF_DEFINES) $(TIFF_INCLUDES) -c -o $@ $<
+	@$(LTCCOMPILE) -c -o $@ $<
 
 .PHONY: all clean distclean install uninstall
 
@@ -502,13 +465,6 @@ InterViews/kit.lo: InterViews/kit.cpp
 IV-X11/session.lo: IV-X11/session.cpp
 	@$(LTCXXCOMPILE) -DIV_LIBALL='"$(datadir)"' -DX_LIBDIR='"$(X_LIBS)"' -c -o $@ $< 
 
-TIFF/tif_fax3.lo: TIFF/g3states.h
-
-TIFF/g3states.h: TIFF/mkg3states
-	TIFF/mkg3states > $@
-
-TIFF/mkg3states: TIFF/mkg3states.c
-	$(CCOMPILE) $(TIFF_DEFINES) $(TIFF_INCLUDES) TIFF/mkg3states.c -o $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
@@ -541,70 +497,6 @@ IV-Mac/raster.lo : ../include/OS/_defines.h ../include/InterViews/raster.h ../in
 IV-Mac/session.lo : ../include/OS/_defines.h ../include/InterViews/style.h ../include/OS/file.h ../include/InterViews/_names.h ../include/OS/os.h ../include/InterViews/display.h ../include/IV-2_6/_names.h ../include/OS/_undefs.h ../include/InterViews/coord.h ../include/OS/enter-scope.h ../include/InterViews/window.h ../include/InterViews/canvas.h ../include/InterViews/_defines.h ../include/InterViews/_enter.h ../include/InterViews/cursor.h ../include/InterViews/iv.h ../include/IV-2_6/_enter.h ../include/InterViews/event.h ../include/InterViews/session.h ../include/InterViews/_undefs.h ../include/InterViews/enter-scope.h ../include/OS/leave-scope.h ../include/InterViews/resource.h ../include/OS/string.h ../include/InterViews/_leave.h ../include/InterViews/geometry.h
 
 IV-Mac/window.lo : ../include/OS/list.h ../include/IV-2_6/_names.h ../include/OS/_undefs.h ../include/OS/enter-scope.h ../include/InterViews/canvas.h ../include/InterViews/_defines.h ../include/InterViews/_enter.h ../include/InterViews/action.h ../include/InterViews/handler.h ../include/InterViews/color.h ../include/InterViews/iv.h ../include/InterViews/event.h ../include/InterViews/session.h ../include/InterViews/glyph.h ../include/IV-Mac/window.h ../include/InterViews/hit.h ../include/InterViews/resource.h ../include/OS/string.h ../include/IV-Mac/cursor.h ../include/IV-Mac/color.h ../include/InterViews/geometry.h ../include/OS/_defines.h ../include/IV-Mac/event.h ../include/IV-Mac/session.h ../include/InterViews/style.h ../include/InterViews/_names.h ../include/OS/os.h ../include/InterViews/display.h ../include/InterViews/coord.h ../include/InterViews/window.h ../include/OS/table.h ../include/OS/math.h ../include/InterViews/cursor.h ../include/IV-2_6/_enter.h ../include/InterViews/_undefs.h ../include/InterViews/enter-scope.h ../include/OS/leave-scope.h ../include/IV-Mac/canvas.h ../include/InterViews/_leave.h
-
-TIFF/mkg3states.lo : TIFF/t4.h TIFF/prototypes.h
-
-TIFF/mkspans.lo : TIFF/tiffcompat.h
-
-TIFF/tif_aux.lo : TIFF/tiffcompat.h TIFF/tiffioP.h TIFF/prototypes.h
-
-TIFF/tif_ccittrle.lo : TIFF/tiffcompat.h TIFF/tiffioP.h TIFF/tif_fax3.h
-
-TIFF/tif_close.lo : TIFF/tiffcompat.h TIFF/tiffioP.h
-
-TIFF/tif_cmprs.lo : TIFF/tiffcompat.h TIFF/tiffioP.h
-
-TIFF/tif_compat.lo : TIFF/tiffcompat.h TIFF/tiffioP.h
-
-TIFF/tif_dir.lo : TIFF/tiffcompat.h TIFF/tiffioP.h TIFF/prototypes.h
-
-TIFF/tif_dirinfo.lo : TIFF/tiffcompat.h TIFF/tiffioP.h TIFF/prototypes.h
-
-TIFF/tif_dirread.lo : TIFF/tiffcompat.h TIFF/tiffioP.h TIFF/prototypes.h
-
-TIFF/tif_dirwrite.lo : TIFF/tiffcompat.h TIFF/tiffioP.h TIFF/prototypes.h
-
-TIFF/tif_dumpmode.lo : TIFF/tiffcompat.h TIFF/tiffioP.h
-
-TIFF/tif_error.lo : TIFF/tiffcompat.h TIFF/tiffioP.h TIFF/prototypes.h
-
-TIFF/tif_fax3.lo : TIFF/tiffcompat.h TIFF/tiffioP.h TIFF/tif_fax3.h TIFF/t4.h
-
-TIFF/tif_fax4.lo : TIFF/tiffcompat.h TIFF/tiffioP.h TIFF/tif_fax3.h
-
-TIFF/tif_flush.lo : TIFF/tiffcompat.h TIFF/tiffioP.h
-
-TIFF/tif_getimage.lo : TIFF/tiffcompat.h TIFF/prototypes.h
-
-TIFF/tif_jpeg.lo : TIFF/tiffcompat.h TIFF/tiffioP.h
-
-TIFF/tif_lzw.lo : TIFF/tiffcompat.h TIFF/tiffioP.h TIFF/prototypes.h
-
-TIFF/tif_machdep.lo : TIFF/tiffcompat.h TIFF/tiffioP.h
-
-TIFF/tif_next.lo : TIFF/tiffcompat.h TIFF/tiffioP.h
-
-TIFF/tif_open.lo : TIFF/tiffcompat.h TIFF/tiffioP.h TIFF/prototypes.h
-
-TIFF/tif_packbits.lo : TIFF/tiffcompat.h TIFF/tiffioP.h
-
-TIFF/tif_print.lo : TIFF/tiffcompat.h TIFF/tiffioP.h
-
-TIFF/tif_read.lo : TIFF/tiffcompat.h TIFF/tiffioP.h
-
-TIFF/tif_strip.lo : TIFF/tiffcompat.h TIFF/tiffioP.h
-
-TIFF/tif_swab.lo : 
-
-TIFF/tif_thunder.lo : TIFF/tiffcompat.h TIFF/tiffioP.h
-
-TIFF/tif_tile.lo : TIFF/tiffcompat.h TIFF/tiffioP.h
-
-TIFF/tif_version.lo : TIFF/tiffcompat.h
-
-TIFF/tif_warning.lo : TIFF/tiffcompat.h TIFF/tiffioP.h TIFF/prototypes.h
-
-TIFF/tif_write.lo : TIFF/tiffcompat.h TIFF/tiffioP.h
 
 Dispatch/dispatcher.lo : ../include/Dispatch/dp.h ../include/OS/_undefs.h ../include/OS/enter-scope.h ../include/Dispatch/enter-scope.h ../include/Dispatch/dispatcher.h ../include/OS/_defines.h ../include/OS/os.h ../include/Dispatch/iohandler.h ../include/Dispatch/_defines.h ../include/OS/leave-scope.h ../include/OS/types.h ../include/OS/memory.h
 
@@ -878,7 +770,7 @@ InterViews/textbuffer.lo : ../include/IV-2_6/_names.h ../include/OS/enter-scope.
 
 InterViews/tformsetter.lo : ../include/IV-2_6/_names.h ../include/OS/enter-scope.h ../include/InterViews/_enter.h ../include/InterViews/_defines.h ../include/InterViews/geometry.h ../include/OS/_defines.h ../include/OS/math.h ../include/IV-2_6/_enter.h ../include/InterViews/enter-scope.h ../include/InterViews/_leave.h ../include/InterViews/transformer.h ../include/OS/_undefs.h ../include/InterViews/canvas.h ../include/InterViews/monoglyph.h ../include/InterViews/iv.h ../include/InterViews/printer.h ../include/InterViews/glyph.h ../include/InterViews/hit.h ../include/InterViews/resource.h ../include/InterViews/_names.h ../include/OS/os.h ../include/InterViews/coord.h ../include/InterViews/tformsetter.h ../include/InterViews/_undefs.h ../include/OS/leave-scope.h
 
-InterViews/tiff.lo : ../include/IV-2_6/_names.h ../include/OS/enter-scope.h ../include/InterViews/_defines.h ../include/InterViews/_enter.h ../include/OS/_defines.h ../include/IV-2_6/_enter.h ../include/InterViews/enter-scope.h ../include/InterViews/tiff.h ../include/InterViews/_leave.h ../include/OS/_undefs.h ../include/TIFF/tiffio.h ../include/InterViews/iv.h ../include/InterViews/color.h ../include/InterViews/resource.h ../include/InterViews/raster.h ../include/InterViews/_names.h ../include/OS/os.h ../include/InterViews/coord.h ../include/InterViews/_undefs.h ../include/OS/leave-scope.h
+InterViews/tiff.lo : ../include/IV-2_6/_names.h ../include/OS/enter-scope.h ../include/InterViews/_defines.h ../include/InterViews/_enter.h ../include/OS/_defines.h ../include/IV-2_6/_enter.h ../include/InterViews/enter-scope.h ../include/InterViews/tiff.h ../include/InterViews/_leave.h ../include/OS/_undefs.h tiffio.h ../include/InterViews/iv.h ../include/InterViews/color.h ../include/InterViews/resource.h ../include/InterViews/raster.h ../include/InterViews/_names.h ../include/OS/os.h ../include/InterViews/coord.h ../include/InterViews/_undefs.h ../include/OS/leave-scope.h
 
 InterViews/tile.lo : ../include/IV-2_6/_names.h ../include/OS/enter-scope.h ../include/InterViews/_defines.h ../include/InterViews/_enter.h ../include/InterViews/geometry.h ../include/OS/_defines.h ../include/OS/math.h ../include/IV-2_6/_enter.h ../include/InterViews/enter-scope.h ../include/InterViews/_leave.h ../include/InterViews/tile.h ../include/OS/_undefs.h ../include/InterViews/deck.h ../include/InterViews/monoglyph.h ../include/InterViews/iv.h ../include/InterViews/glyph.h ../include/InterViews/polyglyph.h ../include/InterViews/resource.h ../include/InterViews/adjust.h ../include/InterViews/scrbox.h ../include/InterViews/_names.h ../include/OS/os.h ../include/InterViews/coord.h ../include/InterViews/layout.h ../include/InterViews/_undefs.h ../include/OS/leave-scope.h
 
@@ -976,7 +868,7 @@ Unidraw/grview.lo : ../include/Unidraw/_undefs.h ../include/Unidraw/grid.h ../in
 
 Unidraw/gvupdater.lo : ../include/Unidraw/_undefs.h ../include/IV-2_6/_names.h ../include/InterViews/font.h ../include/OS/enter-scope.h ../include/Unidraw/ulist.h ../include/InterViews/_enter.h ../include/InterViews/_defines.h ../include/Unidraw/Components/compview.h ../include/Unidraw/Graphic/geomobjs.h ../include/OS/_defines.h ../include/Unidraw/Components/grview.h ../include/Unidraw/Graphic/graphic.h ../include/Unidraw/Graphic/pspaint.h ../include/IV-2_6/InterViews/paint.h ../include/IV-2_6/_enter.h ../include/IV-2_6/InterViews/alignment.h ../include/InterViews/enter-scope.h ../include/InterViews/_leave.h ../include/Unidraw/enter-scope.h ../include/Unidraw/Components/component.h ../include/InterViews/transformer.h ../include/Unidraw/iterator.h ../include/OS/_undefs.h ../include/IV-2_6/InterViews/textstyle.h ../include/InterViews/pattern.h ../include/InterViews/color.h ../include/InterViews/iv.h ../include/Unidraw/_defines.h ../include/InterViews/resource.h ../include/IV-2_6/InterViews/minmax.h ../include/Unidraw/globals.h ../include/IV-2_6/_leave.h ../include/Unidraw/Components/gvupdater.h ../include/InterViews/_names.h ../include/OS/os.h ../include/InterViews/coord.h ../include/Unidraw/classes.h ../include/Unidraw/uhash.h ../include/InterViews/brush.h ../include/InterViews/_undefs.h ../include/IV-2_6/InterViews/defs.h ../include/OS/leave-scope.h ../include/Unidraw/Components/grcomp.h
 
-Unidraw/import.lo : ../include/Unidraw/_undefs.h ../include/InterViews/input.h ../include/Unidraw/editor.h ../include/IV-look/dialogs.h ../include/Unidraw/Graphic/rasterrect.h ../include/IV-2_6/_names.h ../include/InterViews/font.h ../include/OS/enter-scope.h ../include/Unidraw/clipboard.h ../include/InterViews/_defines.h ../include/InterViews/_enter.h ../include/Unidraw/Graphic/ustencil.h ../include/OS/string.h ../include/Unidraw/Components/compview.h ../include/InterViews/geometry.h ../include/Unidraw/Graphic/geomobjs.h ../include/OS/_defines.h ../include/InterViews/style.h ../include/Unidraw/Components/grview.h ../include/Unidraw/Graphic/graphic.h ../include/Unidraw/Graphic/pspaint.h ../include/InterViews/window.h ../include/Unidraw/Graphic/grblock.h ../include/Unidraw/Commands/macro.h ../include/IV-2_6/InterViews/interactor.h ../include/IV-2_6/InterViews/paint.h ../include/IV-2_6/_enter.h ../include/IV-2_6/InterViews/alignment.h ../include/InterViews/enter-scope.h ../include/Unidraw/Commands/import.h ../include/InterViews/tiff.h ../include/InterViews/_leave.h ../include/Unidraw/enter-scope.h ../include/InterViews/dialog.h ../include/Unidraw/Components/component.h ../include/IV-look/field.h ../include/OS/_undefs.h ../include/IV-2_6/InterViews/textstyle.h ../include/InterViews/canvas.h ../include/Unidraw/Components/psview.h ../include/InterViews/monoglyph.h ../include/Unidraw/umap.h ../include/InterViews/pattern.h ../include/InterViews/color.h ../include/Unidraw/Components/rastercomp.h ../include/InterViews/iv.h ../include/Unidraw/Components/stencilcomp.h ../include/TIFF/format.h ../include/InterViews/session.h ../include/Unidraw/unidraw.h ../include/InterViews/glyph.h ../include/Unidraw/_defines.h ../include/InterViews/resource.h ../include/Unidraw/uformat.h ../include/Unidraw/Commands/command.h ../include/IV-2_6/InterViews/minmax.h ../include/Unidraw/globals.h ../include/IV-2_6/_leave.h ../include/Unidraw/Components/externview.h ../include/InterViews/raster.h ../include/Unidraw/Commands/edit.h ../include/InterViews/_names.h ../include/OS/os.h ../include/InterViews/coord.h ../include/Unidraw/classes.h ../include/Unidraw/viewer.h ../include/InterViews/bitmap.h ../include/Unidraw/uarray.h ../include/Unidraw/uhash.h ../include/InterViews/brush.h ../include/IV-2_6/InterViews/defs.h ../include/InterViews/_undefs.h ../include/Unidraw/catalog.h ../include/OS/leave-scope.h ../include/Unidraw/Components/grcomp.h ../include/IV-look/fchooser.h
+Unidraw/import.lo : ../include/Unidraw/_undefs.h ../include/InterViews/input.h ../include/Unidraw/editor.h ../include/IV-look/dialogs.h ../include/Unidraw/Graphic/rasterrect.h ../include/IV-2_6/_names.h ../include/InterViews/font.h ../include/OS/enter-scope.h ../include/Unidraw/clipboard.h ../include/InterViews/_defines.h ../include/InterViews/_enter.h ../include/Unidraw/Graphic/ustencil.h ../include/OS/string.h ../include/Unidraw/Components/compview.h ../include/InterViews/geometry.h ../include/Unidraw/Graphic/geomobjs.h ../include/OS/_defines.h ../include/InterViews/style.h ../include/Unidraw/Components/grview.h ../include/Unidraw/Graphic/graphic.h ../include/Unidraw/Graphic/pspaint.h ../include/InterViews/window.h ../include/Unidraw/Graphic/grblock.h ../include/Unidraw/Commands/macro.h ../include/IV-2_6/InterViews/interactor.h ../include/IV-2_6/InterViews/paint.h ../include/IV-2_6/_enter.h ../include/IV-2_6/InterViews/alignment.h ../include/InterViews/enter-scope.h ../include/Unidraw/Commands/import.h ../include/InterViews/tiff.h ../include/InterViews/_leave.h ../include/Unidraw/enter-scope.h ../include/InterViews/dialog.h ../include/Unidraw/Components/component.h ../include/IV-look/field.h ../include/OS/_undefs.h ../include/IV-2_6/InterViews/textstyle.h ../include/InterViews/canvas.h ../include/Unidraw/Components/psview.h ../include/InterViews/monoglyph.h ../include/Unidraw/umap.h ../include/InterViews/pattern.h ../include/InterViews/color.h ../include/Unidraw/Components/rastercomp.h ../include/InterViews/iv.h ../include/Unidraw/Components/stencilcomp.h ../include/InterViews/session.h ../include/Unidraw/unidraw.h ../include/InterViews/glyph.h ../include/Unidraw/_defines.h ../include/InterViews/resource.h ../include/Unidraw/uformat.h ../include/Unidraw/Commands/command.h ../include/IV-2_6/InterViews/minmax.h ../include/Unidraw/globals.h ../include/IV-2_6/_leave.h ../include/Unidraw/Components/externview.h ../include/InterViews/raster.h ../include/Unidraw/Commands/edit.h ../include/InterViews/_names.h ../include/OS/os.h ../include/InterViews/coord.h ../include/Unidraw/classes.h ../include/Unidraw/viewer.h ../include/InterViews/bitmap.h ../include/Unidraw/uarray.h ../include/Unidraw/uhash.h ../include/InterViews/brush.h ../include/IV-2_6/InterViews/defs.h ../include/InterViews/_undefs.h ../include/Unidraw/catalog.h ../include/OS/leave-scope.h ../include/Unidraw/Components/grcomp.h ../include/IV-look/fchooser.h
 
 Unidraw/iterator.lo : ../include/Unidraw/_undefs.h ../include/IV-2_6/_names.h ../include/OS/enter-scope.h ../include/InterViews/_defines.h ../include/InterViews/_enter.h ../include/OS/_defines.h ../include/IV-2_6/_enter.h ../include/InterViews/enter-scope.h ../include/InterViews/_leave.h ../include/Unidraw/enter-scope.h ../include/Unidraw/iterator.h ../include/OS/_undefs.h ../include/InterViews/iv.h ../include/Unidraw/_defines.h ../include/InterViews/_names.h ../include/OS/os.h ../include/InterViews/_undefs.h ../include/OS/leave-scope.h
 

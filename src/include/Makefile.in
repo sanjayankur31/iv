@@ -32,13 +32,13 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 
-@CARBON_FALSE@@CYGWIN_FALSE@@MINGW_FALSE@DIRS = Dispatch IV-2_6 IV-2_6/InterViews IV-X11 IV-look InterViews OS TIFF
+@CARBON_FALSE@@CYGWIN_FALSE@@MINGW_FALSE@DIRS = Dispatch IV-2_6 IV-2_6/InterViews IV-X11 IV-look InterViews OS
 
-@CYGWIN_TRUE@DIRS = Dispatch IV-Win IV-look InterViews OS TIFF
+@CYGWIN_TRUE@DIRS = Dispatch IV-Win IV-look InterViews OS
 
-@MINGW_TRUE@DIRS = Dispatch IV-Win IV-look InterViews OS TIFF
+@MINGW_TRUE@DIRS = Dispatch IV-Win IV-look InterViews OS
 
-@CARBON_TRUE@DIRS = Dispatch IV-Mac IV-look InterViews OS TIFF
+@CARBON_TRUE@DIRS = Dispatch IV-Mac IV-look InterViews OS
 
 @SET_MAKE@
 
